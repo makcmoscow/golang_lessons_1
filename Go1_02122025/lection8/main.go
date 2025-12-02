@@ -30,6 +30,8 @@ Out: Закрепляем, 10
 package main
 import (
 	"fmt"
+    // "unicode/utf8"
+    // "strconv"
 )
 
 //3.1
@@ -76,3 +78,30 @@ import (
 // 	}
 // }
 //3.4
+// func main(){
+//     var a string
+//     var number, sum int
+// fmt.Println("Enter your grades:\n")
+//     fmt.Scan(&a)
+//     for i:=0; i<utf8.RuneCountInString(a); i++ {
+//         number, _ = strconv.Atoi(string(a[i]))
+//         sum += number
+//     }
+//     fmt.Println(sum)
+// }
+//3.5
+// func main(){
+//     var sum, value int
+//     for {
+//         fmt.Println("Enter any digit but -1\n")
+//         fmt.Scan(&value)
+//         if value == -1{
+//             break
+//         }
+//         sum+=value
+//     }
+//     fmt.Println(sum)
+// }
+//3.6
+//Решил в 3.4, неверно понял условие
+//3.7
