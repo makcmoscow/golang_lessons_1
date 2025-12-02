@@ -12,5 +12,5 @@ func main(){
 	fmt.Println(string(rune(value[0])))
 	fmt.Println(string(rune(value[1])))
 	fmt.Println(string(rune(value[2])))
-
+// подразумевалось value / 100, value / 10 % 10, value % 10
 }
