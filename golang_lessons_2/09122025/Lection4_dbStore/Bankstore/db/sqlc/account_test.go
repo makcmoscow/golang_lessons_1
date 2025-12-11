@@ -1,37 +1,19 @@
 /*
-    Pattern: <filename>_test.go
+Pattern: <filename>_test.go
 */
 package db
+
 import (
-    "Bankstore/utils"
-    "context"
-    "log"
-    "os"
-    "testing"
-    "time"
-    "github.com/jackc/pgx/v5"
-    "github.com/stretchr/testify/require"
+	"Bankstore/utils"
+	"context"
+
+	"testing"
+	"time"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/stretchr/testify/require"
 )
-const (
-    dbSource = "postgresql://app_user:pswd@localhost:5432/bankdb?sslmode=disable"
-)
-// Глобальный контекст для работы с БД и тестами
-var ctx = context.Background()
-// Декларация переменной
-var testQueries *Queries
-func TestMain(m *testing.M) {
-    // Соединение с БД
-    conn, err := pgx.Connect(ctx, dbSource)
-    if err != nil {
-        log.Fatal("can not connect to db", err)
-    }
-    // Закрываем соединение
-    defer conn.Close(ctx)
-    // Вызываем конструктор для создания экземпляра типа данных Queries
-    testQueries = New(conn)
-    // Запускаем subtest(тесты) и итоговый код выполнения передаем в Exit()
-    os.Exit(m.Run())
-}
+
 func TestCreateAccount(t *testing.T) {
     createRandomAccount(t)
 }
@@ -43,7 +25,7 @@ func createRandomAccount(t *testing.T) Account {
         // Balance: ra.Balance,
         Currency: Currency(ra.Currency),
     }
-    account, err := testQueries.CreateAccount(ctx, arg)
+    account, err := testQueries.CreateAccount(context.Background(), arg)
     
     // Две проверки на результат работы CreateAccount
     require.NoError(t, err)
@@ -58,7 +40,7 @@ func createRandomAccount(t *testing.T) Account {
 }
 func TestGetAccount(t *testing.T) {
     account1 := createRandomAccount(t)
-    account2, err := testQueries.GetAccount(ctx, account1.ID)
+    account2, err := testQueries.GetAccount(context.Background(), account1.ID)
     require.NoError(t, err)
     require.NotEmpty(t, account2)
     // test all fields
@@ -74,7 +56,7 @@ func TestUpdateAccount(t *testing.T) {
         ID: account1.ID,
         Balance: utils.RandomInt(0, 1000),
     }
-    account2, err := testQueries.UpdateAccount(ctx, arg)
+    account2, err := testQueries.UpdateAccount(context.Background(), arg)
     require.NoError(t, err)
     require.NotEmpty(t, account2)
     // test all fields
@@ -87,9 +69,9 @@ func TestUpdateAccount(t *testing.T) {
 func TestDeleteAccount(t *testing.T) {
     account1 := createRandomAccount(t)
     // Delete created account
-    err := testQueries.DeleteAccount(ctx, account1.ID)
+    err := testQueries.DeleteAccount(context.Background(), account1.ID)
     require.NoError(t, err)
-    account2, err := testQueries.GetAccount(ctx, account1.ID)
+    account2, err := testQueries.GetAccount(context.Background(), account1.ID)
     require.Error(t, err)
     require.Empty(t, account2)
     // проверка на тип ошибки(нуль строк было обработано)
@@ -103,7 +85,7 @@ func TestListAccounts(t *testing.T) {
         Limit: 8,
         Offset: 0,
     }
-    accounts, err := testQueries.ListAccounts(ctx, arg)
+    accounts, err := testQueries.ListAccounts(context.Background(), arg)
     require.NoError(t, err)
     require.Len(t, accounts, 8)
     for _, acc := range accounts {
