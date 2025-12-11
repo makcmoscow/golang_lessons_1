@@ -1,0 +1,28 @@
+package main
+
+import (
+	"log"
+	"net/http"
+	"net/http/httptest"
+	// "net/http/test"
+	"testing"
+)
+
+func TestGetGreet(t *testing.T) {
+	req, err := http.NewRequest("GET", "http://127.0.0.1:8080/", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	res := httptest.NewRecorder()
+	GetGreet(res, req)
+
+	act := res.Body.String()
+	exp := "<h1>Hello, i'm new web-server! <h1>"
+	if exp != act {
+		t.Fatalf("Expected %s, but got %s", exp, act)
+	}
+	resCode := res.Result().StatusCode
+	if resCode != 200 {
+		t.Fatalf("Expected 200 but fount %d", resCode)
+	}
+}

@@ -1,5 +1,13 @@
 set dotenv-load
 
+# Create postgresql service
+pg_up:
+    docker compose up
+
+# Delete postgresql service
+pg_down:
+    docker compose down
+
 # Start postgresql service
 pg_start:
     docker compose start
@@ -27,3 +35,7 @@ migrate_down:
 # Generate sqlc code
 sqlc:
     sqlc generate
+
+# Testing code
+test:
+    go test -v -cover -timeout 180s ./... -count=1

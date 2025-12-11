@@ -1,1 +1,8 @@
 go 1.25.4
+
+use (
+	./Homework
+	./Lection1_JSON
+	./Lection2_Start_HTTP
+	./Lection3_BooksAPI
+)
