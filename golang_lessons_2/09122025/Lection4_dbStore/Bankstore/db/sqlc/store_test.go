@@ -14,6 +14,8 @@ func TestTransferTx(t *testing.T) {
 	fmt.Println("Before:", account1.Balance, account2.Balance)
 	
 	amount:= int64(10)
+	// fmt.Printf("Context.Background(): %#v", context.Background())
+
 	result, err := store.TransferTx(context.Background(), TransferTxParams{
 		FromAccountID: account1.ID,
 		ToAccountID: account2.ID,
