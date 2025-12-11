@@ -2,7 +2,7 @@ set dotenv-load
 
 # Create postgresql service
 pg_up:
-    docker compose up
+    docker compose up -d
 
 # Delete postgresql service
 pg_down:
