@@ -1,8 +1,10 @@
 package api
 
-import(
-	"github.com/gin-gonic/gin"
+import (
 	db "Bankstore/db/sqlc"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Server struct {
@@ -16,7 +18,6 @@ func NewServer(store *db.Store) *Server{
 
 	//TODO: add routes to router
 	router.POST("/accounts, server.CreateAccount")
-
 	server.router = router
 	return server
 }
@@ -27,7 +28,27 @@ type CreateAccountRequest struct {
 }
 
 func (server *Server) CreateAccount(ctx *gin.Context) {
-	//TODO: 
+	var req CreateAccountRequest
+	//Десериализация входящего JSON
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse((err)))
+		return
+	}
+
+	//На основе входящего CreateAccountRequest создаем CreateAccountParams
+	arg := db.CreateAccountParams{
+		Owner: req.Owner,
+		Currency: req.Currency,
+		Balance: 0,
+	}
+	
+	//На основе arg создаем аккаунт
+	account, err := server.store.CreateAccount(ctx, arg)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, account)
 }
 
 // errorResponse return gin.H -> map[string]interface{}
